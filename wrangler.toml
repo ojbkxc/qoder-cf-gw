@@ -39,10 +39,10 @@ new_sqlite_classes = ["UsageCounter"]
 tag = "v3-key-counter"
 new_sqlite_classes = ["ApiKeyCounter"]
 
-# 每日签到：UTC 03:00 / 04:00 / 05:00（北京时间 11:00 / 12:00 / 13:00），
-# 前一轮没领到会在下一轮重试；已到账的账号自动跳过。
-[triggers]
-crons = ["0 3,4,5 * * *"]
+# 每日签到 cron 已暂停（2026-10-21）：国际版签到统一走天翼云服务器
+# /opt/llm-proxy/qoder_intl_proxy.py（CHECKIN_AT=10:30）。恢复时改回：
+# [triggers]
+# crons = ["0 3,4,5 * * *"]
 
 [observability]
 enabled = true
