@@ -1,0 +1,10 @@
+{
+  "name": "qoder-cf-gw",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "node --check src/index.js && node --check src/admin.js && node --check src/accounts.js && node --check src/chat.js && node --check src/convert.js && node --check src/errors.js && node --check src/key-counter.js && node --check src/model-routes.js && node --check src/models.js && node --check src/refresh-lock.js && node --check src/store.js && node --check src/tokens.js && node --check src/usage-counter.js && node --check src/qoder/client.js && node --check src/qoder/cosy.js",
+    "test": "node --test test/cosy.test.mjs test/core.test.mjs test/keys.test.mjs test/accounts.test.mjs test/routes.test.mjs test/device.test.mjs"
+  }
+}

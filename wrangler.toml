@@ -1,0 +1,48 @@
+# qoder-cf-gw — Qoder 国际版转 OpenAI / Anthropic / Responses 兼容 API
+name = "qoder-cf-gw"
+main = "src/index.js"
+compatibility_date = "2025-08-01"
+account_id = "cc4b64888d2bb80770ff42b0e3c1fad2"
+workers_dev = true
+
+# 管理密码用 `wrangler secret put ADMIN_PASSWORD` 注入，不写进仓库。
+
+# 账号池、API Key、签到记录（KV 免费额度：10 万读/天、1 千写/天）。
+[[kv_namespaces]]
+binding = "KV"
+id = "5d4f49b0c094486abc208b1b12f5813f"
+
+# 单飞续期锁：refresh_token 一次性轮换，多 isolate 并发刷新会互相作废。
+[[durable_objects.bindings]]
+name = "REFRESH_LOCK"
+class_name = "RefreshLock"
+
+# 每日用量计数：每 UTC 日期一个 DO 实例。
+[[durable_objects.bindings]]
+name = "USAGE_COUNTER"
+class_name = "UsageCounter"
+
+# API Key 调用次数原子计数：每把 key 一个 DO 实例。
+[[durable_objects.bindings]]
+name = "KEY_COUNTER"
+class_name = "ApiKeyCounter"
+
+[[migrations]]
+tag = "v1-refresh-lock"
+new_sqlite_classes = ["RefreshLock"]
+
+[[migrations]]
+tag = "v2-usage-counter"
+new_sqlite_classes = ["UsageCounter"]
+
+[[migrations]]
+tag = "v3-key-counter"
+new_sqlite_classes = ["ApiKeyCounter"]
+
+# 每日签到：UTC 03:00 / 04:00 / 05:00（北京时间 11:00 / 12:00 / 13:00），
+# 前一轮没领到会在下一轮重试；已到账的账号自动跳过。
+[triggers]
+crons = ["0 3,4,5 * * *"]
+
+[observability]
+enabled = true
